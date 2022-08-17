@@ -73,7 +73,88 @@ u := uint(f)
 
 Explicit conversion <> C++
 
+### Looping - only For
+Go has only one looping construct, the **for** loop.
 
+```
+for i := 0; i < 10; i++ {
+	sum += i
+}
+```
+```
+// while in other languages
+for sum < 1000 {
+	sum += sum
+}
+```
+```
+for {
+	// forever loop (can break)
+}
+```
+
+### If
+```
+// If with a short statement
+if v := math.Pow(x, n); v < lim {
+	return v
+}
+```
+### Switch
+```
+// No need constant value
+// Auto add break
+
+func main() {
+	fmt.Print("Go runs on ")
+	val := 2
+	val2 := 2
+	switch val {
+		case 1: fmt.Print("Okiela")
+		case val2: fmt.Print("Okiela 2")
+	}
+}
+```
+```
+// Switch with no condition
+// clean way to write long if-then-else chains
+
+func main() {
+	t := time.Now()
+	switch {
+	case t.Hour() < 12:
+		fmt.Println("Good morning!")
+	case t.Hour() < 17:
+		fmt.Println("Good afternoon.")
+	default:
+		fmt.Println("Good evening.")
+	}
+}
+```
+
+### Defer
+```
+// A defer statement defers the execution of a function until the surrounding function returns.
+
+func main() {
+	defer fmt.Println("world")
+
+	fmt.Println("hello")
+}
+```
+```
+// Stacking defers
+
+func main() {
+	fmt.Println("counting")
+
+	for i := 0; i < 10; i++ {
+		defer fmt.Println(i)
+	}
+
+	fmt.Println("done")
+}
+```
 
 ## OOP in Golang
 

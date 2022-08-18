@@ -173,7 +173,7 @@ c++
 
 // in Go:
 var c [5]int
-c++ // panic
+c++ // compile error
 ```
 
 ### Structs
@@ -268,7 +268,19 @@ var m map[string]int // nil
 
 ## OOP in Golang
 
+### Methods
+```
+// value receiver
+func (v Vertex) Abs() float64 {
+	return math.Sqrt(v.X*v.X + v.Y*v.Y)
+}
 
+// pointer receiver
+func (v *Vertex) Abs() float64 {
+	return math.Sqrt(v.X*v.X + v.Y*v.Y)
+}
+
+```
 
 
 

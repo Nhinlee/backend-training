@@ -279,10 +279,105 @@ func (v Vertex) Abs() float64 {
 func (v *Vertex) Abs() float64 {
 	return math.Sqrt(v.X*v.X + v.Y*v.Y)
 }
+```
 
+Methods and pointer indirection
+```
+// Function 
+
+var v Vertex
+ScaleFunc(v, 5)  // Compile error!
+ScaleFunc(&v, 5) // OK
+
+// Pointer indirection (both pointer & value receiver is accept)
+
+var v Vertex
+v.Scale(5)  // OK
+p := &v
+p.Scale(10) // OK
 ```
 
 
+NOTE:
 
+There are two reasons to use a pointer receiver.
+- Can modify the value
+- Avoid copying the value on each method call
+
+all methods on a given type should have either value or pointer receivers, but not a mixture of both.
+
+
+### Interfaces
+
+```
+// Interfaces are implemented implicitly
+
+type I interface {
+	M()
+}
+
+type T struct {
+	S string
+}
+
+func (t *T) M() {
+	if t == nil {
+		fmt.Println("<nil>")
+		return
+	}
+	fmt.Println(t.S)
+}
+
+func main() {
+	var i I
+	describe(i)
+	// i.M() - error
+	
+	var t *T
+	i = t
+	describe(i)
+	i.M() // null pointer in other languages
+
+	i = &T{"hello"}
+	describe(i)
+	i.M()
+}
+
+func describe(i I) {
+	fmt.Printf("(%v, %T)\n", i, i)
+}
+```
+```
+// Dynamic type in other languages
+func main() {
+	var i interface{}
+	describe(i)
+
+	i = 42
+	describe(i)
+
+	i = "hello"
+	describe(i)
+}
+```
+
+### Types
+
+```
+// Type assertions
+t, ok := i.(T)
+```
+
+```
+// Type switches
+switch v := i.(type) {
+case T:
+    // here v has type T
+case S:
+    // here v has type S
+default:
+    // no match; here v has the same type as i
+}
+```
 
 ## Concurrency

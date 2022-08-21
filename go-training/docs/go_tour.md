@@ -381,3 +381,17 @@ default:
 ```
 
 ## Concurrency
+
+<mark>**Don't communicate by sharing memory, share memory by communicating**</mark>
+
+### **Concurrency is not parallelism**
+- Blogs: https://go.dev/blog/waza-talk
+- Slides: https://go.dev/talks/2012/waza.slide#1
+
+### **Concurrency patterns**
+- Generator: function that returns a channel
+- Multiplexing
+- Restoring sequencing
+- Select
+
+### **Advanced concurrency**

@@ -68,8 +68,7 @@ func (f *FireDragon) Lay() ReptileEgg {
 }
 
 func main() {
-	var fireDragon FireDragon
-	var egg ReptileEgg = fireDragon.Lay()
-	var childDragon Reptile = egg.Hatch()
-	fmt.Printf("%T", childDragon)
+	var testMap map[string]int
+	fmt.Print(testMap == nil)
+	fmt.Print(testMap)
 }

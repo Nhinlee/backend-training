@@ -19,7 +19,7 @@ LIMIT $1
 OFFSET $2;
 
 -- name: UpdateUserInfo :one
-UPDATE users SET first_name = $2, last_name = $3, password = $4
+UPDATE users SET first_name = $2, last_name = $3
 WHERE user_id = $1
 RETURNING *;
 

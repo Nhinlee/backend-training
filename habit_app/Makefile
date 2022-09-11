@@ -8,11 +8,14 @@ dropdb:
 	docker exec -it postgres dropdb habits
 
 migrate-up:
-	migrate -path db/migration -database "postgresql://root:nhin123456@localhost:5432/hobbies?sslmode=disable" -verbose up
+	migrate -path db/migration -database "postgresql://root:nhin123456@localhost:5432/habits?sslmode=disable" -verbose up
 
 migrate-down:
-	migrate -path db/migration -database "postgresql://root:nhin123456@localhost:5432/hobbies?sslmode=disable" -verbose down
+	migrate -path db/migration -database "postgresql://root:nhin123456@localhost:5432/habits?sslmode=disable" -verbose down
+
+test:
+	go test -v -cover ./...
 
 sqlc:
 	sqlc generate
-.PHONY: postgres createdb dropdb migrate-up migrate-down sqlc
+.PHONY: postgres createdb dropdb migrate-up migrate-down sqlc test

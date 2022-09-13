@@ -1,6 +1,8 @@
 package db
 
 import (
+	"context"
+
 	"habits.com/habit/utils"
 )
 
@@ -16,4 +18,19 @@ func GetRandomUser() User {
 		Email:     email,
 		Password:  password,
 	}
+}
+
+func CreateRandomUser() (User, CreateUserParams, error) {
+	randomUser := GetRandomUser()
+
+	arg := CreateUserParams{
+		FirstName: randomUser.FirstName,
+		LastName:  randomUser.LastName,
+		Email:     randomUser.Email,
+		Password:  randomUser.Password,
+	}
+
+	user, err := testQueries.CreateUser(context.Background(), arg)
+
+	return user, arg, err
 }

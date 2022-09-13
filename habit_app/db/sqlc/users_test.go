@@ -7,18 +7,8 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func createRandomUser(t *testing.T) User {
-
-	randomUser := GetRandomUser()
-
-	arg := CreateUserParams{
-		FirstName: randomUser.FirstName,
-		LastName:  randomUser.LastName,
-		Email:     randomUser.Email,
-		Password:  randomUser.Password,
-	}
-
-	user, err := testQueries.CreateUser(context.Background(), arg)
+func TestCreateUser(t *testing.T) {
+	user, arg, err := CreateRandomUser()
 
 	require.NoError(t, err)
 	require.NotEmpty(t, user)
@@ -29,16 +19,10 @@ func createRandomUser(t *testing.T) User {
 	require.Equal(t, arg.Password, user.Password)
 
 	require.NotZero(t, user.UserID)
-
-	return user
-}
-
-func TestCreateUser(t *testing.T) {
-	createRandomUser(t)
 }
 
 func TestGetUser(t *testing.T) {
-	user1 := createRandomUser(t)
+	user1, _, err := CreateRandomUser()
 	user2, err := testQueries.GetUser(context.Background(), user1.UserID)
 
 	require.NoError(t, err)
@@ -48,7 +32,7 @@ func TestGetUser(t *testing.T) {
 }
 
 func TestUpdateUser(t *testing.T) {
-	user1 := createRandomUser(t)
+	user1, _, err := CreateRandomUser()
 
 	arg := UpdateUserInfoParams{
 		UserID:    user1.UserID,

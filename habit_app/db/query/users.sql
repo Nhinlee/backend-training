@@ -12,12 +12,6 @@ INSERT INTO users (
 SELECT * FROM users
 WHERE user_id = $1 LIMIT 1;
 
--- name: ListUsers :many
-SELECT * FROM users
-ORDER BY id
-LIMIT $1
-OFFSET $2;
-
 -- name: UpdateUserInfo :one
 UPDATE users SET first_name = $2, last_name = $3
 WHERE user_id = $1

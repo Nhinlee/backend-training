@@ -8,21 +8,11 @@ import (
 )
 
 func TestCreateUser(t *testing.T) {
-	user, arg, err := CreateRandomUser()
-
-	require.NoError(t, err)
-	require.NotEmpty(t, user)
-
-	require.Equal(t, arg.FirstName, user.FirstName)
-	require.Equal(t, arg.LastName, user.LastName)
-	require.Equal(t, arg.Email, user.Email)
-	require.Equal(t, arg.Password, user.Password)
-
-	require.NotZero(t, user.UserID)
+	CreateRandomUser(t)
 }
 
 func TestGetUser(t *testing.T) {
-	user1, _, err := CreateRandomUser()
+	user1 := CreateRandomUser(t)
 	user2, err := testQueries.GetUser(context.Background(), user1.UserID)
 
 	require.NoError(t, err)
@@ -32,7 +22,7 @@ func TestGetUser(t *testing.T) {
 }
 
 func TestUpdateUser(t *testing.T) {
-	user1, _, err := CreateRandomUser()
+	user1 := CreateRandomUser(t)
 
 	arg := UpdateUserInfoParams{
 		UserID:    user1.UserID,

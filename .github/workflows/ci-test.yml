@@ -22,6 +22,9 @@ jobs:
           POSTGRES_PASSWORD: nhin123456
           POSTGRES_USER: root
           POSTGRES_DB: habits
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - 5432:5432          
 
         options: >-
           --health-cmd pg_isready

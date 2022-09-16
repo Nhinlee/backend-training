@@ -11,6 +11,24 @@ jobs:
   test:
     name: DB-Test
     runs-on: ubuntu-latest
+
+    # Service containers to run with `container-job`
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: nhin123456
+          POSTGRES_USER: root
+          POSTGRES_DB: habits
+
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
     - uses: actions/checkout@v3
 
@@ -18,6 +36,16 @@ jobs:
       uses: actions/setup-go@v3
       with:
         go-version: 1.19
+    
+    - name: Install golang migrations
+      run: | 
+        curl -L https://github.com/golang-migrate/migrate/releases/download/v4.15.2/migrate.linux-amd64.tar.gz | tar xvz
+        sudo mv migrate.linux-amd64 /user/bin
+        which migrate
+
+    
+    - name: Migrate up db
+      run: cd habit_app && make migrate-up
 
     - name: Run test
       run: cd habit_app && make test

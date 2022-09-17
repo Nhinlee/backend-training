@@ -8,9 +8,9 @@ INSERT INTO skills (
 
 -- name: ListSkillsByUser :many
 SELECT * FROM skills
-ORDER BY skill_id
-LIMIT $1
-OFFSET $2;
+WHERE user_id = $1
+LIMIT $2
+OFFSET $3;
 
 -- name: UpdateSkill :one
 UPDATE skills SET title = $2

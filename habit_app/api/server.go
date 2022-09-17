@@ -14,7 +14,8 @@ func NewServer(store *db.Store) *Server {
 	server := &Server{store: store}
 	router := gin.Default()
 
-	router.POST("skills/create", server.createSkill)
+	router.POST("/skills/create", server.createSkill)
+	router.GET("/skills", server.getSkillsByUser)
 
 	server.router = router
 	return server

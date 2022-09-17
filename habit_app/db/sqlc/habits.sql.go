@@ -66,7 +66,7 @@ func (q *Queries) GetHabitsByUser(ctx context.Context, userID int64) ([]Habit, e
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Habit
+	items := []Habit{}
 	for rows.Next() {
 		var i Habit
 		if err := rows.Scan(
@@ -105,7 +105,7 @@ func (q *Queries) GetHabitsByUserAndSkill(ctx context.Context, arg GetHabitsByUs
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Habit
+	items := []Habit{}
 	for rows.Next() {
 		var i Habit
 		if err := rows.Scan(

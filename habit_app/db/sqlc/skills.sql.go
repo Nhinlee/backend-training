@@ -41,23 +41,24 @@ func (q *Queries) DeleteSkill(ctx context.Context, skillID int64) error {
 
 const listSkillsByUser = `-- name: ListSkillsByUser :many
 SELECT skill_id, user_id, title FROM skills
-ORDER BY skill_id
-LIMIT $1
-OFFSET $2
+WHERE user_id = $1
+LIMIT $2
+OFFSET $3
 `
 
 type ListSkillsByUserParams struct {
+	UserID int64 `json:"user_id"`
 	Limit  int32 `json:"limit"`
 	Offset int32 `json:"offset"`
 }
 
 func (q *Queries) ListSkillsByUser(ctx context.Context, arg ListSkillsByUserParams) ([]Skill, error) {
-	rows, err := q.db.QueryContext(ctx, listSkillsByUser, arg.Limit, arg.Offset)
+	rows, err := q.db.QueryContext(ctx, listSkillsByUser, arg.UserID, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Skill
+	items := []Skill{}
 	for rows.Next() {
 		var i Skill
 		if err := rows.Scan(&i.SkillID, &i.UserID, &i.Title); err != nil {

@@ -15,17 +15,17 @@ INSERT INTO habits (
     user_id,
     skill_id,
     title,
-    max_consecutive_days
+    target_consecutive_days
 ) VALUES (
     $1, $2, $3, $4
-) RETURNING habit_id, title, max_consecutive_days, skill_id, user_id
+) RETURNING habit_id, title, target_consecutive_days, skill_id, user_id
 `
 
 type CreateHabitParams struct {
-	UserID             int64         `json:"user_id"`
-	SkillID            sql.NullInt64 `json:"skill_id"`
-	Title              string        `json:"title"`
-	MaxConsecutiveDays int32         `json:"max_consecutive_days"`
+	UserID                int64         `json:"user_id"`
+	SkillID               sql.NullInt64 `json:"skill_id"`
+	Title                 string        `json:"title"`
+	TargetConsecutiveDays int32         `json:"target_consecutive_days"`
 }
 
 func (q *Queries) CreateHabit(ctx context.Context, arg CreateHabitParams) (Habit, error) {
@@ -33,13 +33,13 @@ func (q *Queries) CreateHabit(ctx context.Context, arg CreateHabitParams) (Habit
 		arg.UserID,
 		arg.SkillID,
 		arg.Title,
-		arg.MaxConsecutiveDays,
+		arg.TargetConsecutiveDays,
 	)
 	var i Habit
 	err := row.Scan(
 		&i.HabitID,
 		&i.Title,
-		&i.MaxConsecutiveDays,
+		&i.TargetConsecutiveDays,
 		&i.SkillID,
 		&i.UserID,
 	)
@@ -56,7 +56,7 @@ func (q *Queries) DeleteHabit(ctx context.Context, habitID int64) error {
 }
 
 const getHabitsByUser = `-- name: GetHabitsByUser :many
-SELECT habit_id, title, max_consecutive_days, skill_id, user_id FROM habits
+SELECT habit_id, title, target_consecutive_days, skill_id, user_id FROM habits
 WHERE user_id = $1
 `
 
@@ -72,7 +72,7 @@ func (q *Queries) GetHabitsByUser(ctx context.Context, userID int64) ([]Habit, e
 		if err := rows.Scan(
 			&i.HabitID,
 			&i.Title,
-			&i.MaxConsecutiveDays,
+			&i.TargetConsecutiveDays,
 			&i.SkillID,
 			&i.UserID,
 		); err != nil {
@@ -90,7 +90,7 @@ func (q *Queries) GetHabitsByUser(ctx context.Context, userID int64) ([]Habit, e
 }
 
 const getHabitsByUserAndSkill = `-- name: GetHabitsByUserAndSkill :many
-SELECT habit_id, title, max_consecutive_days, skill_id, user_id FROM habits
+SELECT habit_id, title, target_consecutive_days, skill_id, user_id FROM habits
 WHERE user_id = $1 AND skill_id = $2
 `
 
@@ -111,7 +111,7 @@ func (q *Queries) GetHabitsByUserAndSkill(ctx context.Context, arg GetHabitsByUs
 		if err := rows.Scan(
 			&i.HabitID,
 			&i.Title,
-			&i.MaxConsecutiveDays,
+			&i.TargetConsecutiveDays,
 			&i.SkillID,
 			&i.UserID,
 		); err != nil {

@@ -3,7 +3,7 @@ INSERT INTO habits (
     user_id,
     skill_id,
     title,
-    max_consecutive_days
+    target_consecutive_days
 ) VALUES (
     $1, $2, $3, $4
 ) RETURNING *;

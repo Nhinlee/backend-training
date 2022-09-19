@@ -40,10 +40,10 @@ func (store *Store) execTx(ctx context.Context, fn func(*Queries) error) error {
 }
 
 type CreateHabitAndSkillTxParams struct {
-	UserID             int64  `json:"user_id"`
-	SkillTitle         string `json:"skill_title"`
-	HabitTitle         string `json:"habit_title"`
-	MaxConsecutiveDays int32  `json:"max_consecutive_days"`
+	UserID                int64  `json:"user_id"`
+	SkillTitle            string `json:"skill_title"`
+	HabitTitle            string `json:"habit_title"`
+	TargetConsecutiveDays int32  `json:"target_consecutive_days"`
 }
 
 type CreateHabitAndSkillResult struct {
@@ -68,10 +68,10 @@ func (store *Store) CreateHabitAndSkill(ctx context.Context, arg CreateHabitAndS
 
 		// Create Habit
 		result.NewHabit, err = q.CreateHabit(ctx, CreateHabitParams{
-			Title:              arg.HabitTitle,
-			SkillID:            sql.NullInt64{Int64: result.NewSkill.SkillID, Valid: true},
-			UserID:             arg.UserID,
-			MaxConsecutiveDays: arg.MaxConsecutiveDays,
+			Title:                 arg.HabitTitle,
+			SkillID:               sql.NullInt64{Int64: result.NewSkill.SkillID, Valid: true},
+			UserID:                arg.UserID,
+			TargetConsecutiveDays: arg.TargetConsecutiveDays,
 		})
 		if err != nil {
 			return err

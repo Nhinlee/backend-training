@@ -66,3 +66,25 @@ func CreateRandomSkill(t *testing.T) Skill {
 
 	return skill
 }
+
+func CreateRandomHabit(t *testing.T, user *User) Habit {
+
+	title := "habit test " + utils.RandomString(20)
+	targetConsecutiveDays := 21
+
+	arg := CreateHabitParams{
+		UserID:                user.UserID,
+		Title:                 title,
+		TargetConsecutiveDays: int32(targetConsecutiveDays),
+	}
+
+	habit, err := testQueries.CreateHabit(context.Background(), arg)
+
+	require.NoError(t, err)
+	require.NotEmpty(t, habit)
+	require.Equal(t, arg.Title, habit.Title)
+	require.Equal(t, arg.SkillID, habit.SkillID)
+	require.Equal(t, arg.UserID, user.UserID)
+
+	return habit
+}

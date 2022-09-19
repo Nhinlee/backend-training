@@ -9,11 +9,11 @@ import (
 )
 
 type Habit struct {
-	HabitID            int64         `json:"habit_id"`
-	Title              string        `json:"title"`
-	MaxConsecutiveDays int32         `json:"max_consecutive_days"`
-	SkillID            sql.NullInt64 `json:"skill_id"`
-	UserID             int64         `json:"user_id"`
+	HabitID               int64         `json:"habit_id"`
+	Title                 string        `json:"title"`
+	TargetConsecutiveDays int32         `json:"target_consecutive_days"`
+	SkillID               sql.NullInt64 `json:"skill_id"`
+	UserID                int64         `json:"user_id"`
 }
 
 type HabitLog struct {

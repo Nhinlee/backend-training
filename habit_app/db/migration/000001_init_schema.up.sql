@@ -15,7 +15,7 @@ CREATE TABLE "users" (
 CREATE TABLE "habits" (
   "habit_id" bigserial PRIMARY KEY NOT NULL,
   "title" varchar NOT NULL,
-  "max_consecutive_days" integer NOT NULL,
+  "target_consecutive_days" integer NOT NULL,
   "skill_id" bigint,
   "user_id" bigint NOT NULL
 );

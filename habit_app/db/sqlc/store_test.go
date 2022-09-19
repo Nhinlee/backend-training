@@ -22,13 +22,13 @@ func TestCreateHabitAndSkill(t *testing.T) {
 		go func() {
 			skillTitle := utils.RandomString(20)
 			habitTitle := utils.RandomString(20)
-			maxConsecutiveDays := int32(utils.RandomInt(20, 100))
+			targetConsecutiveDays := int32(utils.RandomInt(20, 100))
 
 			rs, err := store.CreateHabitAndSkill(context.Background(), CreateHabitAndSkillTxParams{
-				UserID:             user.UserID,
-				SkillTitle:         skillTitle,
-				HabitTitle:         habitTitle,
-				MaxConsecutiveDays: maxConsecutiveDays,
+				UserID:                user.UserID,
+				SkillTitle:            skillTitle,
+				HabitTitle:            habitTitle,
+				TargetConsecutiveDays: targetConsecutiveDays,
 			})
 
 			errs <- err

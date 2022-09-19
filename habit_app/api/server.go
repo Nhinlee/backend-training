@@ -17,6 +17,8 @@ func NewServer(store *db.Store) *Server {
 	router.POST("/skills/create", server.createSkill)
 	router.GET("/skills", server.getSkillsByUser)
 
+	router.POST("/habit_logs/create", server.createHabitLog)
+
 	server.router = router
 	return server
 }

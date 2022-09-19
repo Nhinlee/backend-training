@@ -17,9 +17,9 @@ type Habit struct {
 }
 
 type HabitLog struct {
-	UserID   int64        `json:"user_id"`
-	HabitID  int64        `json:"habit_id"`
-	DateTime sql.NullTime `json:"date_time"`
+	UserID   int64 `json:"user_id"`
+	HabitID  int64 `json:"habit_id"`
+	DateTime int64 `json:"date_time"`
 }
 
 type Skill struct {

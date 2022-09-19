@@ -7,7 +7,6 @@ package db
 
 import (
 	"context"
-	"database/sql"
 )
 
 const createHabitLog = `-- name: CreateHabitLog :one
@@ -21,9 +20,9 @@ INSERT INTO habit_logs (
 `
 
 type CreateHabitLogParams struct {
-	UserID   int64        `json:"user_id"`
-	HabitID  int64        `json:"habit_id"`
-	DateTime sql.NullTime `json:"date_time"`
+	UserID   int64 `json:"user_id"`
+	HabitID  int64 `json:"habit_id"`
+	DateTime int64 `json:"date_time"`
 }
 
 func (q *Queries) CreateHabitLog(ctx context.Context, arg CreateHabitLogParams) (HabitLog, error) {
@@ -67,7 +66,6 @@ SELECT user_id, habit_id, date_time from habit_logs
 WHERE user_id = $1
 ORDER BY date_time DESC
 LIMIT 1
-OFFSET 1
 `
 
 func (q *Queries) GetLatestHabitLogByUser(ctx context.Context, userID int64) (HabitLog, error) {

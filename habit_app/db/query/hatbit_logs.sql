@@ -16,5 +16,4 @@ ORDER BY habit_id;
 SELECT * from habit_logs
 WHERE user_id = $1
 ORDER BY date_time DESC
-LIMIT 1
-OFFSET 1;
+LIMIT 1;

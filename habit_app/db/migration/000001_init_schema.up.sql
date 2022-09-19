@@ -23,7 +23,7 @@ CREATE TABLE "habits" (
 CREATE TABLE "habit_logs" (
   "user_id" bigint NOT NULL,
   "habit_id" bigint NOT NULL,
-  "date_time" timestamptz DEFAULT (now()),
+  "date_time" bigint NOT NULL,
   PRIMARY KEY ("user_id", "habit_id")
 );
 

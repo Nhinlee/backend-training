@@ -21,7 +21,7 @@ CREATE TABLE "habits" (
 );
 
 CREATE TABLE "habit_logs" (
-  "user_id" bigserial NOT NULL,
+  "user_id" bigint NOT NULL,
   "habit_id" bigint NOT NULL,
   "date_time" timestamptz DEFAULT (now()),
   PRIMARY KEY ("user_id", "habit_id")

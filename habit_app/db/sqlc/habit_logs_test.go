@@ -62,8 +62,16 @@ func TestGetLatestHabitLogByUser(t *testing.T) {
 	createHabitLogByUser(t, &user, &habit2, now+20)
 	latestHabitLog := createHabitLogByUser(t, &user, &habit3, now+30)
 
-	habitLog, err := testQueries.GetLatestHabitLogByUser(context.Background(), user.UserID)
+	habitLogs, err := testQueries.GetLatestHabitLogByUser(context.Background(), user.UserID)
 	require.NoError(t, err)
-	require.NotEmpty(t, habitLog)
-	require.Equal(t, latestHabitLog.HabitID, habitLog.HabitID)
+	require.NotEmpty(t, habitLogs)
+	require.Equal(t, latestHabitLog.HabitID, habitLogs[0].HabitID)
+}
+
+func TestGetLatestHabitLogByUserIsEmpty(t *testing.T) {
+	user := CreateRandomUser(t)
+
+	habitLogs, err := testQueries.GetLatestHabitLogByUser(context.Background(), user.UserID)
+	require.NoError(t, err)
+	require.Equal(t, habitLogs, []HabitLog([]HabitLog{}))
 }

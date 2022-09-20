@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"time"
 )
 
 // Contain all functions to execute db queries and transaction
@@ -75,6 +76,60 @@ func (store *Store) CreateHabitAndSkill(ctx context.Context, arg CreateHabitAndS
 		})
 		if err != nil {
 			return err
+		}
+
+		return nil
+	})
+
+	return result, err
+}
+
+type CreateHabitLogTxParams struct {
+	UserID  int64 `json:"user_id"`
+	HabitID int64 `json:"habit_id"`
+}
+
+type CreateHabitLogTxResult struct {
+	NewHabitLog HabitLog `json:"habit_log"`
+}
+
+func (store *Store) CreateHabitLogTx(ctx context.Context, arg CreateHabitLogTxParams) (CreateHabitLogTxResult, error) {
+	var result CreateHabitLogTxResult
+	now := time.Now()
+
+	err := store.execTx(ctx, func(q *Queries) error {
+		// Get latest habit log by user
+		latestHabitLogs, err := q.GetLatestHabitLogByUser(ctx, arg.UserID)
+		if err != nil {
+			return err
+		}
+
+		// Check can create habit logic
+		var canCreateHabitLog bool
+		if len(latestHabitLogs) == 0 {
+			canCreateHabitLog = true
+		} else {
+			latestTime := time.Unix(latestHabitLogs[0].DateTime, 0)
+
+			if now.Day() != latestTime.Day() ||
+				now.Month() != latestTime.Month() ||
+				now.Year() != latestTime.Year() {
+				canCreateHabitLog = true
+			}
+		}
+
+		// Insert new habit log if check pass
+		if canCreateHabitLog {
+			habitLog, err := q.CreateHabitLog(ctx, CreateHabitLogParams{
+				UserID:   arg.UserID,
+				HabitID:  arg.HabitID,
+				DateTime: now.Unix(),
+			})
+			if err != nil {
+				return err
+			}
+
+			result.NewHabitLog = habitLog
 		}
 
 		return nil

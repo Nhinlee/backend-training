@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	db "habits.com/habit/db/sqlc"
 )
 
 type CreateHabitLogRequest struct {
@@ -18,4 +19,15 @@ func (server *Server) createHabitLog(ctx *gin.Context) {
 		return
 	}
 
+	rs, err := server.store.CreateHabitLogTx(ctx, db.CreateHabitLogTxParams{
+		UserID:  req.UserID,
+		HabitID: req.HabitID,
+	})
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, rs.NewHabitLog)
 }

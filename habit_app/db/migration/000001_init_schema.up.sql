@@ -36,3 +36,19 @@ ALTER TABLE "habits" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("user_id");
 ALTER TABLE "habit_logs" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("user_id");
 
 ALTER TABLE "habit_logs" ADD FOREIGN KEY ("habit_id") REFERENCES "habits" ("habit_id");
+
+-- Just for testing
+INSERT INTO public.users(
+	first_name, last_name, email, password)
+	VALUES ('Nhin', 'Le Chi', 'nhinlechi@gmail.com', '123456');
+
+-- Just for testing
+INSERT INTO public.skills(
+	user_id, title)
+	VALUES (1, 'algorithm & data structure');
+INSERT INTO public.skills(
+	user_id, title)
+	VALUES (1, 'english');
+INSERT INTO public.skills(
+	user_id, title)
+	VALUES (1, 'learning');

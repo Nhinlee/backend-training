@@ -61,16 +61,32 @@ func (q *Queries) GetHabitLogsByUser(ctx context.Context, userID int64) ([]Habit
 	return items, nil
 }
 
-const getLatestHabitLogByUser = `-- name: GetLatestHabitLogByUser :one
+const getLatestHabitLogByUser = `-- name: GetLatestHabitLogByUser :many
 SELECT user_id, habit_id, date_time from habit_logs
 WHERE user_id = $1
 ORDER BY date_time DESC
 LIMIT 1
 `
 
-func (q *Queries) GetLatestHabitLogByUser(ctx context.Context, userID int64) (HabitLog, error) {
-	row := q.db.QueryRowContext(ctx, getLatestHabitLogByUser, userID)
-	var i HabitLog
-	err := row.Scan(&i.UserID, &i.HabitID, &i.DateTime)
-	return i, err
+func (q *Queries) GetLatestHabitLogByUser(ctx context.Context, userID int64) ([]HabitLog, error) {
+	rows, err := q.db.QueryContext(ctx, getLatestHabitLogByUser, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []HabitLog{}
+	for rows.Next() {
+		var i HabitLog
+		if err := rows.Scan(&i.UserID, &i.HabitID, &i.DateTime); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }

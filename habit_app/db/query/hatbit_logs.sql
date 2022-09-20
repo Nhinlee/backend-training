@@ -12,7 +12,7 @@ SELECT * FROM habit_logs
 WHERE user_id = $1
 ORDER BY habit_id;
 
--- name: GetLatestHabitLogByUser :one
+-- name: GetLatestHabitLogByUser :many
 SELECT * from habit_logs
 WHERE user_id = $1
 ORDER BY date_time DESC

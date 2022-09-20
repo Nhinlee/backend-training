@@ -8,8 +8,8 @@ import (
 )
 
 type CreateHabitLogRequest struct {
-	UserID  int64 `json:"user_id"`
-	HabitID int64 `json:"habit_id"`
+	UserID  int64 `json:"user_id" binding:"required"`
+	HabitID int64 `json:"habit_id" binding:"required"`
 }
 
 func (server *Server) createHabitLog(ctx *gin.Context) {

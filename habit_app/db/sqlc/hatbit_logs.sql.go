@@ -63,13 +63,18 @@ func (q *Queries) GetHabitLogsByUser(ctx context.Context, userID int64) ([]Habit
 
 const getLatestHabitLogByUser = `-- name: GetLatestHabitLogByUser :many
 SELECT user_id, habit_id, date_time from habit_logs
-WHERE user_id = $1
+WHERE user_id = $1 AND habit_id = $2
 ORDER BY date_time DESC
 LIMIT 1
 `
 
-func (q *Queries) GetLatestHabitLogByUser(ctx context.Context, userID int64) ([]HabitLog, error) {
-	rows, err := q.db.QueryContext(ctx, getLatestHabitLogByUser, userID)
+type GetLatestHabitLogByUserParams struct {
+	UserID  int64 `json:"user_id"`
+	HabitID int64 `json:"habit_id"`
+}
+
+func (q *Queries) GetLatestHabitLogByUser(ctx context.Context, arg GetLatestHabitLogByUserParams) ([]HabitLog, error) {
+	rows, err := q.db.QueryContext(ctx, getLatestHabitLogByUser, arg.UserID, arg.HabitID)
 	if err != nil {
 		return nil, err
 	}

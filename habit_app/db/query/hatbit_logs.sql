@@ -14,6 +14,6 @@ ORDER BY habit_id;
 
 -- name: GetLatestHabitLogByUser :many
 SELECT * from habit_logs
-WHERE user_id = $1
+WHERE user_id = $1 AND habit_id = $2
 ORDER BY date_time DESC
 LIMIT 1;

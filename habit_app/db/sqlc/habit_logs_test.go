@@ -3,7 +3,6 @@ package db
 import (
 	"context"
 	"testing"
-	"time"
 
 	"github.com/stretchr/testify/require"
 )
@@ -51,27 +50,13 @@ func TestGetHabitLogByUser(t *testing.T) {
 	}
 }
 
-func TestGetLatestHabitLogByUser(t *testing.T) {
-	user := CreateRandomUser(t)
-	habit1 := CreateRandomHabit(t, &user)
-	habit2 := CreateRandomHabit(t, &user)
-	habit3 := CreateRandomHabit(t, &user)
-	now := time.Now().Unix()
-
-	createHabitLogByUser(t, &user, &habit1, now+10)
-	createHabitLogByUser(t, &user, &habit2, now+20)
-	latestHabitLog := createHabitLogByUser(t, &user, &habit3, now+30)
-
-	habitLogs, err := testQueries.GetLatestHabitLogByUser(context.Background(), user.UserID)
-	require.NoError(t, err)
-	require.NotEmpty(t, habitLogs)
-	require.Equal(t, latestHabitLog.HabitID, habitLogs[0].HabitID)
-}
-
 func TestGetLatestHabitLogByUserIsEmpty(t *testing.T) {
 	user := CreateRandomUser(t)
 
-	habitLogs, err := testQueries.GetLatestHabitLogByUser(context.Background(), user.UserID)
+	habitLogs, err := testQueries.GetLatestHabitLogByUser(context.Background(), GetLatestHabitLogByUserParams{
+		UserID:  user.UserID,
+		HabitID: -1,
+	})
 	require.NoError(t, err)
 	require.Equal(t, habitLogs, []HabitLog([]HabitLog{}))
 }

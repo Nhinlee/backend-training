@@ -100,7 +100,10 @@ func (store *Store) CreateHabitLogTx(ctx context.Context, arg CreateHabitLogTxPa
 
 	err := store.execTx(ctx, func(q *Queries) error {
 		// Get latest habit log by user
-		latestHabitLogs, err := q.GetLatestHabitLogByUser(ctx, arg.UserID)
+		latestHabitLogs, err := q.GetLatestHabitLogByUser(ctx, GetLatestHabitLogByUserParams{
+			UserID:  arg.UserID,
+			HabitID: arg.HabitID,
+		})
 		if err != nil {
 			return err
 		}

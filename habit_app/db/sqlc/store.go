@@ -90,7 +90,8 @@ type CreateHabitLogTxParams struct {
 }
 
 type CreateHabitLogTxResult struct {
-	NewHabitLog HabitLog `json:"habit_log"`
+	NewHabitLog    HabitLog `json:"habit_log"`
+	IsCreateFailed bool     `json:"is_create_failed"`
 }
 
 func (store *Store) CreateHabitLogTx(ctx context.Context, arg CreateHabitLogTxParams) (CreateHabitLogTxResult, error) {
@@ -132,6 +133,7 @@ func (store *Store) CreateHabitLogTx(ctx context.Context, arg CreateHabitLogTxPa
 			result.NewHabitLog = habitLog
 		}
 
+		result.IsCreateFailed = true
 		return nil
 	})
 

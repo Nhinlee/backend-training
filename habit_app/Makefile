@@ -20,6 +20,6 @@ sqlc:
 	sqlc generate
 
 server:
-	go run main.go
+	nodemon --exec go run main.go --signal SIGTERM
 
 .PHONY: postgres createdb dropdb migrate-up migrate-down sqlc test server

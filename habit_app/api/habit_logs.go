@@ -29,5 +29,5 @@ func (server *Server) createHabitLog(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, rs.NewHabitLog)
+	ctx.JSON(http.StatusOK, rs)
 }

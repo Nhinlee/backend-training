@@ -24,7 +24,7 @@ CREATE TABLE "habit_logs" (
   "user_id" bigint NOT NULL,
   "habit_id" bigint NOT NULL,
   "date_time" bigint NOT NULL,
-  PRIMARY KEY ("user_id", "habit_id")
+  PRIMARY KEY ("user_id", "habit_id", "date_time")
 );
 
 ALTER TABLE "skills" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("user_id");

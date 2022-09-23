@@ -7,22 +7,28 @@ import (
 	"time"
 )
 
+type Store interface {
+	Querier
+	CreateHabitAndSkill(ctx context.Context, arg CreateHabitAndSkillTxParams) (CreateHabitAndSkillResult, error)
+	CreateHabitLogTx(ctx context.Context, arg CreateHabitLogTxParams) (CreateHabitLogTxResult, error)
+}
+
 // Contain all functions to execute db queries and transaction
-type Store struct {
+type SQLStore struct {
 	*Queries
 	db *sql.DB
 }
 
 // Store Constructor
-func NewStore(db *sql.DB) *Store {
-	return &Store{
+func NewStore(db *sql.DB) Store {
+	return &SQLStore{
 		db:      db,
 		Queries: New(db),
 	}
 }
 
 // executes queries function in db transaction & support rollback
-func (store *Store) execTx(ctx context.Context, fn func(*Queries) error) error {
+func (store *SQLStore) execTx(ctx context.Context, fn func(*Queries) error) error {
 	tx, err := store.db.BeginTx(ctx, nil)
 	if err != nil {
 		return err
@@ -52,7 +58,7 @@ type CreateHabitAndSkillResult struct {
 	NewHabit Habit `json:"habit"`
 }
 
-func (store *Store) CreateHabitAndSkill(ctx context.Context, arg CreateHabitAndSkillTxParams) (CreateHabitAndSkillResult, error) {
+func (store *SQLStore) CreateHabitAndSkill(ctx context.Context, arg CreateHabitAndSkillTxParams) (CreateHabitAndSkillResult, error) {
 	var result CreateHabitAndSkillResult
 
 	err := store.execTx(ctx, func(q *Queries) error {
@@ -94,7 +100,7 @@ type CreateHabitLogTxResult struct {
 	IsCreateFailed bool     `json:"is_create_failed"`
 }
 
-func (store *Store) CreateHabitLogTx(ctx context.Context, arg CreateHabitLogTxParams) (CreateHabitLogTxResult, error) {
+func (store *SQLStore) CreateHabitLogTx(ctx context.Context, arg CreateHabitLogTxParams) (CreateHabitLogTxResult, error) {
 	var result CreateHabitLogTxResult
 	now := time.Now()
 

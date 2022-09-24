@@ -8,7 +8,7 @@ CREATE TABLE "users" (
   "user_id" bigserial PRIMARY KEY NOT NULL,
   "first_name" varchar NOT NULL,
   "last_name" varchar NOT NULL,
-  "email" varchar NOT NULL,
+  "email" varchar NOT NULL UNIQUE,
   "password" varchar NOT NULL
 );
 

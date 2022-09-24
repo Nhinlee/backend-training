@@ -21,3 +21,14 @@ func TestPassword(t *testing.T) {
 	err = CheckPassword(wrongPassword, hashedPassword)
 	require.Equal(t, bcrypt.ErrMismatchedHashAndPassword, err)
 }
+
+func TestHashTheSamePassword(t *testing.T) {
+	password := RandomString(6)
+
+	hashedPassword1, err := HashPassword(password)
+	require.NoError(t, err)
+	hashedPassword2, err := HashPassword(password)
+	require.NoError(t, err)
+
+	require.NotEqual(t, hashedPassword1, hashedPassword2)
+}

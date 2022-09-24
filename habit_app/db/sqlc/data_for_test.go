@@ -13,12 +13,13 @@ func GetRandomUser() User {
 	lastName := "test " + utils.RandomString(10)
 	email := "test+" + utils.RandomString(10) + "@gmail.com"
 	password := utils.RandomString(10)
+	hashedPassword, _ := utils.HashPassword(password)
 
 	return User{
 		FirstName:      firstName,
 		LastName:       lastName,
 		Email:          email,
-		HashedPassword: password,
+		HashedPassword: hashedPassword,
 	}
 }
 

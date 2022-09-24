@@ -10,8 +10,14 @@ dropdb:
 migrate-up:
 	migrate -path db/migration -database "postgresql://root:nhin123456@localhost:5432/habits?sslmode=disable" -verbose up
 
+migrate-up1:
+	migrate -path db/migration -database "postgresql://root:nhin123456@localhost:5432/habits?sslmode=disable" -verbose up 1
+
 migrate-down:
 	migrate -path db/migration -database "postgresql://root:nhin123456@localhost:5432/habits?sslmode=disable" -verbose down
+
+migrate-down1:
+	migrate -path db/migration -database "postgresql://root:nhin123456@localhost:5432/habits?sslmode=disable" -verbose down 1
 
 test:
 	go test -v -cover ./...
@@ -22,4 +28,4 @@ sqlc:
 server:
 	nodemon --exec go run main.go --signal SIGTERM
 
-.PHONY: postgres createdb dropdb migrate-up migrate-down sqlc test server
+.PHONY: postgres createdb dropdb migrate-up migrate-down migrate-up1 migrate-down1 sqlc test server

@@ -23,8 +23,8 @@ CREATE TABLE "habits" (
 CREATE TABLE "habit_logs" (
   "user_id" bigint NOT NULL,
   "habit_id" bigint NOT NULL,
-  "date_time" bigint NOT NULL,
-  PRIMARY KEY ("user_id", "habit_id", "date_time")
+  "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY ("user_id", "habit_id", "created_at")
 );
 
 ALTER TABLE "skills" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("user_id");

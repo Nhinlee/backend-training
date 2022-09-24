@@ -119,7 +119,7 @@ func (store *SQLStore) CreateHabitLogTx(ctx context.Context, arg CreateHabitLogT
 		if len(latestHabitLogs) == 0 {
 			canCreateHabitLog = true
 		} else {
-			latestTime := time.Unix(latestHabitLogs[0].DateTime, 0)
+			latestTime := latestHabitLogs[0].CreatedAt
 
 			if now.Day() != latestTime.Day() ||
 				now.Month() != latestTime.Month() ||
@@ -131,9 +131,9 @@ func (store *SQLStore) CreateHabitLogTx(ctx context.Context, arg CreateHabitLogT
 		// Insert new habit log if check pass
 		if canCreateHabitLog {
 			habitLog, err := q.CreateHabitLog(ctx, CreateHabitLogParams{
-				UserID:   arg.UserID,
-				HabitID:  arg.HabitID,
-				DateTime: now.Unix(),
+				UserID:    arg.UserID,
+				HabitID:   arg.HabitID,
+				CreatedAt: now,
 			})
 			if err != nil {
 				return err
@@ -142,7 +142,7 @@ func (store *SQLStore) CreateHabitLogTx(ctx context.Context, arg CreateHabitLogT
 			result.NewHabitLog = habitLog
 		}
 
-		result.IsCreateFailed = true
+		result.IsCreateFailed = !canCreateHabitLog
 		return nil
 	})
 

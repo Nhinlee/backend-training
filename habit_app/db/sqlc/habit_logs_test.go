@@ -3,15 +3,16 @@ package db
 import (
 	"context"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/require"
 )
 
-func createHabitLogByUser(t *testing.T, user *User, habit *Habit, dateTime int64) HabitLog {
+func createHabitLogByUser(t *testing.T, user *User, habit *Habit, createdAt time.Time) HabitLog {
 	arg := CreateHabitLogParams{
-		HabitID:  habit.HabitID,
-		UserID:   user.UserID,
-		DateTime: dateTime,
+		HabitID:   habit.HabitID,
+		UserID:    user.UserID,
+		CreatedAt: createdAt,
 	}
 	habitLog, err := testQueries.CreateHabitLog(context.Background(), arg)
 	require.NoError(t, err)
@@ -26,7 +27,7 @@ func TestCreateHabitLog(t *testing.T) {
 	user := CreateRandomUser(t)
 	habit := CreateRandomHabit(t, &user)
 
-	createHabitLogByUser(t, &user, &habit, 0)
+	createHabitLogByUser(t, &user, &habit, time.Now())
 }
 
 func TestGetHabitLogByUser(t *testing.T) {
@@ -38,8 +39,8 @@ func TestGetHabitLogByUser(t *testing.T) {
 		habit2.HabitID: true,
 	}
 
-	createHabitLogByUser(t, &user, &habit1, 0)
-	createHabitLogByUser(t, &user, &habit2, 0)
+	createHabitLogByUser(t, &user, &habit1, time.Now())
+	createHabitLogByUser(t, &user, &habit2, time.Now())
 
 	habitLogs, err := testQueries.GetHabitLogsByUser(context.Background(), user.UserID)
 	require.NoError(t, err)

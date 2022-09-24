@@ -7,33 +7,34 @@ package db
 
 import (
 	"context"
+	"time"
 )
 
 const createHabitLog = `-- name: CreateHabitLog :one
 INSERT INTO habit_logs (
     user_id,
     habit_id,
-    date_time
+    created_at
 ) VALUES (
     $1, $2, $3
-) RETURNING user_id, habit_id, date_time
+) RETURNING user_id, habit_id, created_at
 `
 
 type CreateHabitLogParams struct {
-	UserID   int64 `json:"user_id"`
-	HabitID  int64 `json:"habit_id"`
-	DateTime int64 `json:"date_time"`
+	UserID    int64     `json:"user_id"`
+	HabitID   int64     `json:"habit_id"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
 func (q *Queries) CreateHabitLog(ctx context.Context, arg CreateHabitLogParams) (HabitLog, error) {
-	row := q.db.QueryRowContext(ctx, createHabitLog, arg.UserID, arg.HabitID, arg.DateTime)
+	row := q.db.QueryRowContext(ctx, createHabitLog, arg.UserID, arg.HabitID, arg.CreatedAt)
 	var i HabitLog
-	err := row.Scan(&i.UserID, &i.HabitID, &i.DateTime)
+	err := row.Scan(&i.UserID, &i.HabitID, &i.CreatedAt)
 	return i, err
 }
 
 const getHabitLogsByUser = `-- name: GetHabitLogsByUser :many
-SELECT user_id, habit_id, date_time FROM habit_logs
+SELECT user_id, habit_id, created_at FROM habit_logs
 WHERE user_id = $1
 ORDER BY habit_id
 `
@@ -47,7 +48,7 @@ func (q *Queries) GetHabitLogsByUser(ctx context.Context, userID int64) ([]Habit
 	items := []HabitLog{}
 	for rows.Next() {
 		var i HabitLog
-		if err := rows.Scan(&i.UserID, &i.HabitID, &i.DateTime); err != nil {
+		if err := rows.Scan(&i.UserID, &i.HabitID, &i.CreatedAt); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -62,9 +63,9 @@ func (q *Queries) GetHabitLogsByUser(ctx context.Context, userID int64) ([]Habit
 }
 
 const getLatestHabitLogByUser = `-- name: GetLatestHabitLogByUser :many
-SELECT user_id, habit_id, date_time from habit_logs
+SELECT user_id, habit_id, created_at from habit_logs
 WHERE user_id = $1 AND habit_id = $2
-ORDER BY date_time DESC
+ORDER BY created_at DESC
 LIMIT 1
 `
 
@@ -82,7 +83,7 @@ func (q *Queries) GetLatestHabitLogByUser(ctx context.Context, arg GetLatestHabi
 	items := []HabitLog{}
 	for rows.Next() {
 		var i HabitLog
-		if err := rows.Scan(&i.UserID, &i.HabitID, &i.DateTime); err != nil {
+		if err := rows.Scan(&i.UserID, &i.HabitID, &i.CreatedAt); err != nil {
 			return nil, err
 		}
 		items = append(items, i)

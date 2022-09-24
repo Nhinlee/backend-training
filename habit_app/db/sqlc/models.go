@@ -6,6 +6,7 @@ package db
 
 import (
 	"database/sql"
+	"time"
 )
 
 type Habit struct {
@@ -17,9 +18,9 @@ type Habit struct {
 }
 
 type HabitLog struct {
-	UserID   int64 `json:"user_id"`
-	HabitID  int64 `json:"habit_id"`
-	DateTime int64 `json:"date_time"`
+	UserID    int64     `json:"user_id"`
+	HabitID   int64     `json:"habit_id"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
 type Skill struct {
@@ -29,9 +30,11 @@ type Skill struct {
 }
 
 type User struct {
-	UserID    int64  `json:"user_id"`
-	FirstName string `json:"first_name"`
-	LastName  string `json:"last_name"`
-	Email     string `json:"email"`
-	Password  string `json:"password"`
+	UserID            int64     `json:"user_id"`
+	FirstName         string    `json:"first_name"`
+	LastName          string    `json:"last_name"`
+	Email             string    `json:"email"`
+	HashedPassword    string    `json:"hashed_password"`
+	CreatedAt         time.Time `json:"created_at"`
+	PasswordChangedAt time.Time `json:"password_changed_at"`
 }

@@ -14,17 +14,17 @@ INSERT INTO users (
     first_name,
     last_name,
     email,
-    password
+    hashed_password
 ) VALUES (
     $1, $2, $3, $4
-) RETURNING user_id, first_name, last_name, email, password
+) RETURNING user_id, first_name, last_name, email, hashed_password, created_at, password_changed_at
 `
 
 type CreateUserParams struct {
-	FirstName string `json:"first_name"`
-	LastName  string `json:"last_name"`
-	Email     string `json:"email"`
-	Password  string `json:"password"`
+	FirstName      string `json:"first_name"`
+	LastName       string `json:"last_name"`
+	Email          string `json:"email"`
+	HashedPassword string `json:"hashed_password"`
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
@@ -32,7 +32,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		arg.FirstName,
 		arg.LastName,
 		arg.Email,
-		arg.Password,
+		arg.HashedPassword,
 	)
 	var i User
 	err := row.Scan(
@@ -40,7 +40,9 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		&i.FirstName,
 		&i.LastName,
 		&i.Email,
-		&i.Password,
+		&i.HashedPassword,
+		&i.CreatedAt,
+		&i.PasswordChangedAt,
 	)
 	return i, err
 }
@@ -55,7 +57,7 @@ func (q *Queries) DeleteUser(ctx context.Context, userID int64) error {
 }
 
 const getUser = `-- name: GetUser :one
-SELECT user_id, first_name, last_name, email, password FROM users
+SELECT user_id, first_name, last_name, email, hashed_password, created_at, password_changed_at FROM users
 WHERE user_id = $1 LIMIT 1
 `
 
@@ -67,7 +69,9 @@ func (q *Queries) GetUser(ctx context.Context, userID int64) (User, error) {
 		&i.FirstName,
 		&i.LastName,
 		&i.Email,
-		&i.Password,
+		&i.HashedPassword,
+		&i.CreatedAt,
+		&i.PasswordChangedAt,
 	)
 	return i, err
 }
@@ -75,7 +79,7 @@ func (q *Queries) GetUser(ctx context.Context, userID int64) (User, error) {
 const updateUserInfo = `-- name: UpdateUserInfo :one
 UPDATE users SET first_name = $2, last_name = $3
 WHERE user_id = $1
-RETURNING user_id, first_name, last_name, email, password
+RETURNING user_id, first_name, last_name, email, hashed_password, created_at, password_changed_at
 `
 
 type UpdateUserInfoParams struct {
@@ -92,7 +96,9 @@ func (q *Queries) UpdateUserInfo(ctx context.Context, arg UpdateUserInfoParams) 
 		&i.FirstName,
 		&i.LastName,
 		&i.Email,
-		&i.Password,
+		&i.HashedPassword,
+		&i.CreatedAt,
+		&i.PasswordChangedAt,
 	)
 	return i, err
 }

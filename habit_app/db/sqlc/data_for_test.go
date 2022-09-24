@@ -15,10 +15,10 @@ func GetRandomUser() User {
 	password := utils.RandomString(10)
 
 	return User{
-		FirstName: firstName,
-		LastName:  lastName,
-		Email:     email,
-		Password:  password,
+		FirstName:      firstName,
+		LastName:       lastName,
+		Email:          email,
+		HashedPassword: password,
 	}
 }
 
@@ -26,10 +26,10 @@ func CreateRandomUser(t *testing.T) User {
 	randomUser := GetRandomUser()
 
 	arg := CreateUserParams{
-		FirstName: randomUser.FirstName,
-		LastName:  randomUser.LastName,
-		Email:     randomUser.Email,
-		Password:  randomUser.Password,
+		FirstName:      randomUser.FirstName,
+		LastName:       randomUser.LastName,
+		Email:          randomUser.Email,
+		HashedPassword: randomUser.HashedPassword,
 	}
 
 	user, err := testQueries.CreateUser(context.Background(), arg)
@@ -40,7 +40,7 @@ func CreateRandomUser(t *testing.T) User {
 	require.Equal(t, arg.FirstName, user.FirstName)
 	require.Equal(t, arg.LastName, user.LastName)
 	require.Equal(t, arg.Email, user.Email)
-	require.Equal(t, arg.Password, user.Password)
+	require.Equal(t, arg.HashedPassword, user.HashedPassword)
 
 	require.NotZero(t, user.UserID)
 

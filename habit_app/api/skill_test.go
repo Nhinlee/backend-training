@@ -34,7 +34,7 @@ func TestGetSkillAPI(t *testing.T) {
 		Times(1).Return([]db.Skill{skill}, nil)
 
 	// Start server to send request
-	server := NewServer(store)
+	server := NewTestServer(t, store)
 	recorder := httptest.NewRecorder()
 
 	url := fmt.Sprintf("/skills?user_id=%d&page_id=%d&page_size=%d", skill.UserID, 1, 5)

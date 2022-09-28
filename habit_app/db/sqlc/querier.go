@@ -20,7 +20,7 @@ type Querier interface {
 	GetHabitsByUser(ctx context.Context, userID int64) ([]Habit, error)
 	GetHabitsByUserAndSkill(ctx context.Context, arg GetHabitsByUserAndSkillParams) ([]Habit, error)
 	GetLatestHabitLogByUser(ctx context.Context, arg GetLatestHabitLogByUserParams) ([]HabitLog, error)
-	GetUser(ctx context.Context, userID int64) (User, error)
+	GetUser(ctx context.Context, email string) (User, error)
 	ListSkillsByUser(ctx context.Context, arg ListSkillsByUserParams) ([]Skill, error)
 	UpdateSkill(ctx context.Context, arg UpdateSkillParams) (Skill, error)
 	UpdateUserInfo(ctx context.Context, arg UpdateUserInfoParams) (User, error)

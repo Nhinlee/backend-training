@@ -10,7 +10,7 @@ INSERT INTO users (
 
 -- name: GetUser :one
 SELECT * FROM users
-WHERE user_id = $1 LIMIT 1;
+WHERE email = $1 LIMIT 1;
 
 -- name: UpdateUserInfo :one
 UPDATE users SET first_name = $2, last_name = $3

@@ -2,5 +2,10 @@
     "cSpell.words": [
         "mapstructure",
         "Paseto"
-    ]
+    ],
+    "protoc": {
+        "options": [
+            "--proto_path=proto",
+        ]
+    }
 }

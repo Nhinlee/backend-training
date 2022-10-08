@@ -31,7 +31,11 @@ gen-proto:
     --go-grpc_out=pb --go-grpc_opt=paths=source_relative \
     proto/*.proto
 
+evans:
+	evans --host localhost --port 9090 -r repl
+
+
 server:
 	nodemon --exec go run main.go --signal SIGTERM
 
-.PHONY: postgres createdb dropdb migrate-up migrate-down migrate-up1 migrate-down1 sqlc test server gen-proto
+.PHONY: postgres createdb dropdb migrate-up migrate-down migrate-up1 migrate-down1 sqlc test server gen-proto evans

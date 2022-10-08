@@ -3,10 +3,15 @@ package main
 import (
 	"database/sql"
 	"log"
+	"net"
 
 	_ "github.com/lib/pq"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 	"habits.com/habit/api"
 	db "habits.com/habit/db/sqlc"
+	"habits.com/habit/pb"
+	rpcapi "habits.com/habit/rpc_api"
 	"habits.com/habit/utils"
 )
 
@@ -24,16 +29,38 @@ func main() {
 
 	store := db.NewStore(conn)
 
-	runHTTPServer(config, store)
+	runGrpcServer(&config, store)
 }
 
-func runHTTPServer(config utils.Config, store db.Store) {
-	server, err := api.NewServer(&config, store)
+func runGrpcServer(config *utils.Config, store db.Store) {
+	server, err := rpcapi.NewServer(config, store)
+	if err != nil {
+		log.Fatal("cannot create server:", err)
+	}
+
+	grpcServer := grpc.NewServer()
+	pb.RegisterUserModifierServer(grpcServer, server)
+	reflection.Register(grpcServer) // Share api visible for client - consider to security or not?
+
+	listener, err := net.Listen("tcp", config.GRPCServerAddress)
+	if err != nil {
+		log.Fatal("cannot create listener")
+	}
+
+	log.Printf("start gRPC server at %s", listener.Addr().String())
+	err = grpcServer.Serve(listener)
+	if err != nil {
+		log.Fatal("cannot start gRPC server")
+	}
+}
+
+func runHTTPServer(config *utils.Config, store db.Store) {
+	server, err := api.NewServer(config, store)
 	if err != nil {
 		log.Fatal("cannot create server: ", err)
 	}
 
-	err = server.Start(config.ServerAddress)
+	err = server.Start(config.HTTPServerAddress)
 	if err != nil {
 		log.Fatal("cannot start server:", err)
 	}

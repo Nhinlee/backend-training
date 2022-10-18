@@ -40,6 +40,7 @@ func runGrpcServer(config *utils.Config, store db.Store) {
 
 	grpcServer := grpc.NewServer()
 	pb.RegisterUserModifierServer(grpcServer, server)
+	pb.RegisterChatServiceServer(grpcServer, server)
 	reflection.Register(grpcServer) // Share api visible for client - consider to security or not?
 
 	listener, err := net.Listen("tcp", config.GRPCServerAddress)

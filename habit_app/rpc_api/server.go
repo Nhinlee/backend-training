@@ -11,6 +11,7 @@ import (
 
 type Server struct {
 	pb.UnimplementedUserModifierServer
+	pb.UnimplementedChatServiceServer
 	config       *utils.Config
 	store        db.Store
 	tokenFactory token.TokenFactory

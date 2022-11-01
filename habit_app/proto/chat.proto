@@ -4,7 +4,9 @@ package pb;
 
 option go_package = "habits.com/habit/pb";
 
-message SubscribeRequest {}
+message SubscribeRequest {
+    int64 userID = 1; // TODO: This can be remove when implement get user info from grpc request
+}
 
 message SubscribeResponse {
     Event event = 1;
@@ -29,6 +31,11 @@ message Event {
     }
 }
 
+message Close {
+
+}
+
 service ChatService {
     rpc Subscribe (SubscribeRequest) returns (stream SubscribeResponse) {}
+    rpc BroadcastMessage (Event) returns (Close) {}
 }

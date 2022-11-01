@@ -15,6 +15,9 @@ type Server struct {
 	config       *utils.Config
 	store        db.Store
 	tokenFactory token.TokenFactory
+
+	// Chat
+	connections []*Connection
 }
 
 func NewServer(config *utils.Config, store db.Store) (*Server, error) {
@@ -23,10 +26,13 @@ func NewServer(config *utils.Config, store db.Store) (*Server, error) {
 		return nil, fmt.Errorf("cannot create token factory: %w", err)
 	}
 
+	connections := make([]*Connection, 0)
+
 	server := &Server{
 		store:        store,
 		tokenFactory: tokenFactory,
 		config:       config,
+		connections:  connections,
 	}
 
 	return server, nil

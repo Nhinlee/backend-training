@@ -1,0 +1,61 @@
+@startuml
+
+database chat_app_db {
+
+}
+
+Node_1 --> chat_app_db
+Node_2 --> chat_app_db
+
+
+package Servers {
+    component Node_1 {
+    component Hub_1 {
+    }
+    [Hub ...]
+
+    portin sub1
+    }
+
+    component Node_2 {
+    component Hub_x {
+    }
+    [Hub ....]
+
+    portin sub2
+    }
+
+    component NATS {
+
+    }
+}
+
+NATS --> sub1
+NATS --> sub2
+
+note left of Servers 
+    Each Hub will contain
+    Map<String, Connection> connections
+    Key = "conversationID"
+    Value = "Connection" (grpc_stream, user_id, ...)
+
+end note
+
+
+package Clients {
+    component User1 {
+    }
+
+    component User2 {
+    }
+
+    component User3 {
+    }
+}
+
+Hub_1 --> User1
+Hub_x --> User2
+Hub_x --> User3
+
+
+@enduml

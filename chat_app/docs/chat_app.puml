@@ -1,4 +1,4 @@
-@startuml
+@startuml chat_app
 
 database chat_app_db {
 

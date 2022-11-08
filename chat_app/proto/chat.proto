@@ -43,6 +43,6 @@ message SendMessageResponse {
 }
 
 service ChatService {
-    rpc Subscribe (SubscribeRequest) returns (SubscribeResponse) {}
+    rpc Subscribe (SubscribeRequest) returns (stream SubscribeResponse) {}
     rpc SendMessage (SendMessageRequest) returns (SendMessageResponse);
 }

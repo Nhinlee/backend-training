@@ -4,6 +4,7 @@ import (
 	"log"
 	"net"
 	"v1/config"
+	"v1/pb"
 	rpcapi "v1/rpc_api"
 
 	"google.golang.org/grpc"
@@ -20,12 +21,13 @@ func main() {
 }
 
 func runGRPCServer(config *config.Config) {
-	_, err := rpcapi.NewServer(config)
+	server, err := rpcapi.NewServer(config)
 	if err != nil {
 		log.Fatal("Cannot create server: ", err)
 	}
 
 	grpcServer := grpc.NewServer()
+	pb.RegisterChatServiceServer(grpcServer, server)
 	reflection.Register(grpcServer)
 
 	listener, err := net.Listen("tcp", config.GRPCServerAddress)

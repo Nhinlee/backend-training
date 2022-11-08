@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "chat_app/v1/pb";
+
+/// Subscribe Stream
+
+message SubscribeRequest {
+    string user_id = 1; // TODO: This can me remove when implement get user info logic from grpc request
+}
+
+message SubscribeResponse {
+    Event event = 1;
+}
+
+message Event {
+    oneof event {
+        NewMessageEvent message = 1;
+        PingEvent ping = 2;
+    }
+}
+
+message NewMessageEvent {
+    string conversation_id = 1;
+    string message_id = 2;
+    string content = 3;
+}
+
+message PingEvent {
+}
+
+
+// Send Message
+
+message SendMessageRequest {
+    string conversation_id = 1;
+    string content = 2;
+}
+
+message SendMessageResponse {
+    string message_id = 1;
+}
+
+service ChatService {
+    rpc Subscribe (SubscribeRequest) returns (SubscribeResponse) {}
+    rpc SendMessage (SendMessageRequest) returns (SendMessageResponse);
+}

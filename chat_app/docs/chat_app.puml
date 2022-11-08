@@ -36,8 +36,8 @@ NATS --> sub2
 note left of Servers 
     Each Hub will contain
     Map<String, Connection> connections
-    Key = "conversationID"
-    Value = "Connection" (grpc_stream, user_id, ...)
+    Key = "userID"
+    Value = "Connection" (grpc_stream, metadata, ...)
 
 end note
 

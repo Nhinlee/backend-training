@@ -2,6 +2,7 @@ package rpcapi
 
 import (
 	"context"
+	"fmt"
 	"sync"
 	"v1/pb"
 )
@@ -34,7 +35,19 @@ func (server *Server) SendMessage(ctx context.Context, req *pb.SendMessageReques
 		wait.Add(1)
 
 		go func(event *pb.Event, conn *Connection) {
-			// TODO: implement send message logic here
+			defer wait.Done()
+			if conn.active {
+				err := conn.stream.Send(&pb.SubscribeResponse{
+					Event: event,
+				})
+				fmt.Printf("Sending message to: %v", conn)
+
+				if err != nil {
+					fmt.Printf("Error with stream: %v - error: %v", conn, err)
+					conn.active = false
+					conn.errors <- err
+				}
+			}
 		}(&pb.Event{Event: &pb.Event_Message{Message: event}}, conn)
 	}
 

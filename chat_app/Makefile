@@ -2,22 +2,22 @@ postgres:
 	docker run --name postgres -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=nhin123456 -d postgres:14.5-alpine
 
 createdb:
-	docker exec -it postgres createdb --username=root --owner=root habits
+	docker exec -it postgres createdb --username=root --owner=root chat_app
 
 dropdb:
-	docker exec -it postgres dropdb habits
+	docker exec -it postgres dropdb chat_app
 
 migrate-up:
-	migrate -path db/migration -database "postgresql://root:nhin123456@localhost:5432/habits?sslmode=disable" -verbose up
+	migrate -path db/migration -database "postgresql://root:nhin123456@localhost:5432/chat_app?sslmode=disable" -verbose up
 
 migrate-up1:
-	migrate -path db/migration -database "postgresql://root:nhin123456@localhost:5432/habits?sslmode=disable" -verbose up 1
+	migrate -path db/migration -database "postgresql://root:nhin123456@localhost:5432/chat_app?sslmode=disable" -verbose up 1
 
 migrate-down:
-	migrate -path db/migration -database "postgresql://root:nhin123456@localhost:5432/habits?sslmode=disable" -verbose down
+	migrate -path db/migration -database "postgresql://root:nhin123456@localhost:5432/chat_app?sslmode=disable" -verbose down
 
 migrate-down1:
-	migrate -path db/migration -database "postgresql://root:nhin123456@localhost:5432/habits?sslmode=disable" -verbose down 1
+	migrate -path db/migration -database "postgresql://root:nhin123456@localhost:5432/chat_app?sslmode=disable" -verbose down 1
 
 test:
 	go test -v -cover ./...

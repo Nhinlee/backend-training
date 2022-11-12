@@ -20,7 +20,7 @@ func getRandomConversation() db.Conversation {
 	}
 }
 
-func createRandomConversation(t *testing.T) db.Conversation {
+func CreateRandomConversation(t *testing.T) db.Conversation {
 	randomConversation := getRandomConversation()
 
 	args := db.CreateConversationParams{
@@ -40,11 +40,11 @@ func createRandomConversation(t *testing.T) db.Conversation {
 }
 
 func TestCreateConversation(t *testing.T) {
-	createRandomConversation(t)
+	CreateRandomConversation(t)
 }
 
 func TestGetConversation(t *testing.T) {
-	randomConversation := createRandomConversation(t)
+	randomConversation := CreateRandomConversation(t)
 
 	conversation, err := testQueries.GetConversationById(context.Background(), randomConversation.ConversationID)
 
@@ -55,7 +55,7 @@ func TestGetConversation(t *testing.T) {
 }
 
 func TestUpdateConversation(t *testing.T) {
-	randomConversation := createRandomConversation(t)
+	randomConversation := CreateRandomConversation(t)
 
 	args := db.UpdateConversationInfoParams{
 		ConversationID: randomConversation.ConversationID,
@@ -75,7 +75,7 @@ func TestUpdateConversation(t *testing.T) {
 }
 
 func TestDeleteConversation(t *testing.T) {
-	randomConversation := createRandomConversation(t)
+	randomConversation := CreateRandomConversation(t)
 
 	err := testQueries.DeleteConversation(context.Background(), randomConversation.ConversationID)
 

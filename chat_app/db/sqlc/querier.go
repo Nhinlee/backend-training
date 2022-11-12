@@ -10,6 +10,7 @@ import (
 
 type Querier interface {
 	CreateConversation(ctx context.Context, arg CreateConversationParams) (Conversation, error)
+	CreateConversationUser(ctx context.Context, arg CreateConversationUserParams) (ConversationUser, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
 	DeleteConversation(ctx context.Context, conversationID string) error
 	DeleteUser(ctx context.Context, userID string) error

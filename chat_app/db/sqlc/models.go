@@ -11,46 +11,46 @@ import (
 	"time"
 )
 
-type ConversationMemberStatus string
+type ConversationUserStatus string
 
 const (
-	ConversationMemberStatusActive   ConversationMemberStatus = "active"
-	ConversationMemberStatusDeactive ConversationMemberStatus = "deactive"
+	ConversationUserStatusActive   ConversationUserStatus = "active"
+	ConversationUserStatusDeactive ConversationUserStatus = "deactive"
 )
 
-func (e *ConversationMemberStatus) Scan(src interface{}) error {
+func (e *ConversationUserStatus) Scan(src interface{}) error {
 	switch s := src.(type) {
 	case []byte:
-		*e = ConversationMemberStatus(s)
+		*e = ConversationUserStatus(s)
 	case string:
-		*e = ConversationMemberStatus(s)
+		*e = ConversationUserStatus(s)
 	default:
-		return fmt.Errorf("unsupported scan type for ConversationMemberStatus: %T", src)
+		return fmt.Errorf("unsupported scan type for ConversationUserStatus: %T", src)
 	}
 	return nil
 }
 
-type NullConversationMemberStatus struct {
-	ConversationMemberStatus ConversationMemberStatus
-	Valid                    bool // Valid is true if String is not NULL
+type NullConversationUserStatus struct {
+	ConversationUserStatus ConversationUserStatus
+	Valid                  bool // Valid is true if String is not NULL
 }
 
 // Scan implements the Scanner interface.
-func (ns *NullConversationMemberStatus) Scan(value interface{}) error {
+func (ns *NullConversationUserStatus) Scan(value interface{}) error {
 	if value == nil {
-		ns.ConversationMemberStatus, ns.Valid = "", false
+		ns.ConversationUserStatus, ns.Valid = "", false
 		return nil
 	}
 	ns.Valid = true
-	return ns.ConversationMemberStatus.Scan(value)
+	return ns.ConversationUserStatus.Scan(value)
 }
 
 // Value implements the driver Valuer interface.
-func (ns NullConversationMemberStatus) Value() (driver.Value, error) {
+func (ns NullConversationUserStatus) Value() (driver.Value, error) {
 	if !ns.Valid {
 		return nil, nil
 	}
-	return ns.ConversationMemberStatus, nil
+	return ns.ConversationUserStatus, nil
 }
 
 type Conversation struct {
@@ -59,11 +59,11 @@ type Conversation struct {
 	CreatedAt        time.Time      `json:"created_at"`
 }
 
-type ConversationMember struct {
-	UserID         string                       `json:"user_id"`
-	ConversationID string                       `json:"conversation_id"`
-	Status         NullConversationMemberStatus `json:"status"`
-	CreatedAt      time.Time                    `json:"created_at"`
+type ConversationUser struct {
+	UserID         string                     `json:"user_id"`
+	ConversationID string                     `json:"conversation_id"`
+	Status         NullConversationUserStatus `json:"status"`
+	CreatedAt      time.Time                  `json:"created_at"`
 }
 
 type User struct {

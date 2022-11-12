@@ -1,4 +1,4 @@
-CREATE TYPE "conversation_member_status" AS ENUM (
+CREATE TYPE "conversation_user_status" AS ENUM (
   'active',
   'deactive'
 );
@@ -9,10 +9,10 @@ CREATE TABLE "conversations" (
   "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 
-CREATE TABLE "conversation_members" (
+CREATE TABLE "conversation_users" (
   "user_id" varchar NOT NULL,
   "conversation_id" varchar NOT NULL,
-  "status" conversation_member_status DEFAULT ('active'),
+  "status" conversation_user_status DEFAULT ('active'),
   "created_at" timestamptz NOT NULL DEFAULT (now()),
   PRIMARY KEY ("user_id", "conversation_id")
 );
@@ -27,6 +27,6 @@ CREATE TABLE "users" (
   "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 
-ALTER TABLE "conversation_members" ADD FOREIGN KEY ("conversation_id") REFERENCES "conversations" ("conversation_id");
+ALTER TABLE "conversation_users" ADD FOREIGN KEY ("conversation_id") REFERENCES "conversations" ("conversation_id");
 
-ALTER TABLE "conversation_members" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("user_id");
+ALTER TABLE "conversation_users" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("user_id");

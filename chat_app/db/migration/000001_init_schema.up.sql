@@ -5,7 +5,7 @@ CREATE TYPE "conversation_member_status" AS ENUM (
 
 CREATE TABLE "conversations" (
   "conversation_id" varchar PRIMARY KEY NOT NULL,
-  "name" varchar,
+  "conversation_name" varchar,
   "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 

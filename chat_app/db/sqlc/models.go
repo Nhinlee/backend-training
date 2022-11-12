@@ -54,9 +54,9 @@ func (ns NullConversationMemberStatus) Value() (driver.Value, error) {
 }
 
 type Conversation struct {
-	ConversationID string         `json:"conversation_id"`
-	Name           sql.NullString `json:"name"`
-	CreatedAt      time.Time      `json:"created_at"`
+	ConversationID   string         `json:"conversation_id"`
+	ConversationName sql.NullString `json:"conversation_name"`
+	CreatedAt        time.Time      `json:"created_at"`
 }
 
 type ConversationMember struct {

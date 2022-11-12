@@ -1,4 +1,4 @@
-DROP TABLE IF EXIST conversations;
-DROP TABLE IF EXIST conversation_members;
-DROP TABLE IF EXIST users;
-DROP TYPE IF EXIST conversation_member_status;
+DROP TABLE IF EXISTS conversations;
+DROP TABLE IF EXISTS conversation_members;
+DROP TABLE IF EXISTS users;
+DROP TYPE IF EXISTS conversation_member_status;

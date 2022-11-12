@@ -8,24 +8,42 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func CreateConversationUser(t *testing.T, conversationID string) db.ConversationUser {
+	user := CreateRandomUser(t)
+
+	c_user, err := testQueries.CreateConversationUser(context.Background(), db.CreateConversationUserParams{
+		UserID:         user.UserID,
+		ConversationID: conversationID,
+	})
+	require.NoError(t, err)
+	require.NotEmpty(t, c_user)
+
+	return c_user
+}
+
 func TestCreateConversationUser(t *testing.T) {
 	conversation := CreateRandomConversation(t)
+	conversationID := conversation.ConversationID
 
-	user1 := CreateRandomUser(t)
-	user2 := CreateRandomUser(t)
+	CreateConversationUser(t, conversationID)
+	CreateConversationUser(t, conversationID)
+	CreateConversationUser(t, conversationID)
+	CreateConversationUser(t, conversationID)
+}
 
-	c_user1, err := testQueries.CreateConversationUser(context.Background(), db.CreateConversationUserParams{
-		UserID:         user1.UserID,
-		ConversationID: conversation.ConversationID,
-	})
+func TestGetUserIDByConversationID(t *testing.T) {
+	conversation := CreateRandomConversation(t)
+	conversationID := conversation.ConversationID
+
+	userIDs := []string{
+		CreateConversationUser(t, conversationID).UserID,
+		CreateConversationUser(t, conversationID).UserID,
+		CreateConversationUser(t, conversationID).UserID,
+		CreateConversationUser(t, conversationID).UserID,
+	}
+
+	actualUserIDs, err := testQueries.ListUserIdByConversationId(context.Background(), conversationID)
 	require.NoError(t, err)
-	require.NotEmpty(t, c_user1)
-
-	c_user2, err := testQueries.CreateConversationUser(context.Background(), db.CreateConversationUserParams{
-		UserID:         user2.UserID,
-		ConversationID: conversation.ConversationID,
-	})
-	require.NoError(t, err)
-	require.NotEmpty(t, c_user2)
-
+	require.NotEmpty(t, actualUserIDs)
+	require.Equal(t, userIDs, actualUserIDs)
 }

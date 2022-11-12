@@ -11,6 +11,7 @@ import (
 )
 
 func GetRandomUser() db.User {
+	userId := utils.RandomID()
 	firstName := "test " + utils.RandomString(10)
 	lastName := "test " + utils.RandomString(10)
 	email := "test+" + utils.RandomString(10) + "@gmail.com"
@@ -18,6 +19,7 @@ func GetRandomUser() db.User {
 	hashedPassword, _ := core.HashPassword(password)
 
 	return db.User{
+		UserID:         userId,
 		FirstName:      firstName,
 		LastName:       lastName,
 		Email:          email,
@@ -29,6 +31,7 @@ func CreateRandomUser(t *testing.T) db.User {
 	randomUser := GetRandomUser()
 
 	arg := db.CreateUserParams{
+		UserID:         randomUser.UserID,
 		FirstName:      randomUser.FirstName,
 		LastName:       randomUser.LastName,
 		Email:          randomUser.Email,

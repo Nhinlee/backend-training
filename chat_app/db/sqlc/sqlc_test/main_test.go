@@ -7,6 +7,8 @@ import (
 	"testing"
 	"v1/config"
 	db "v1/db/sqlc"
+
+	_ "github.com/lib/pq"
 )
 
 var testQueries *db.Queries

@@ -4,12 +4,18 @@ import (
 	"math/rand"
 	"strings"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 const alphabet = "abcdefghijklmnopqrstuvwxyz"
 
 func init() {
 	rand.Seed(time.Now().UnixNano())
+}
+
+func RandomID() string {
+	return uuid.New().String()
 }
 
 // Random Int between min -> max

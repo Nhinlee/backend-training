@@ -30,3 +30,32 @@ CREATE TABLE "users" (
 ALTER TABLE "conversation_users" ADD FOREIGN KEY ("conversation_id") REFERENCES "conversations" ("conversation_id");
 
 ALTER TABLE "conversation_users" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("user_id");
+
+-- DUMP Data for testing
+
+-- Users
+INSERT INTO public.users(
+	user_id, first_name, last_name, email, hashed_password)
+	VALUES ('u1', 'Nhin', 'Lee', 'nhinlechi@gmail.com', 'wefwefwefwefweffwef');
+INSERT INTO public.users(
+	user_id, first_name, last_name, email, hashed_password)
+	VALUES ('u2', 'Eddie', 'Sin', 'eddie@gmail.com', 'wefwefweffwfwefwefwv');
+INSERT INTO public.users(
+	user_id, first_name, last_name, email, hashed_password)
+	VALUES ('u3', 'Jacky', 'Jan', 'jacky@gmail.com', 'wefwvwwbwergwefwef');
+
+-- Conversations
+INSERT INTO public.conversations(
+	conversation_id, conversation_name)
+	VALUES ('c1', 'Test conversation');
+
+-- Conversation Users
+INSERT INTO public.conversation_users(
+	user_id, conversation_id, status)
+	VALUES ('u1', 'c1', 'active');
+INSERT INTO public.conversation_users(
+	user_id, conversation_id, status)
+	VALUES ('u2', 'c1', 'active');
+INSERT INTO public.conversation_users(
+	user_id, conversation_id, status)
+	VALUES ('u3', 'c1', 'active');

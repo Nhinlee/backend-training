@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"sync"
 	"v1/pb"
+
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 func (server *Server) Subscribe(req *pb.SubscribeRequest, srv pb.ChatService_SubscribeServer) error {
@@ -20,18 +23,44 @@ func (server *Server) Subscribe(req *pb.SubscribeRequest, srv pb.ChatService_Sub
 }
 
 func (server *Server) SendMessage(ctx context.Context, req *pb.SendMessageRequest) (*pb.SendMessageResponse, error) {
-	// Filter all connections with user_id in conversation
 
-	event := &pb.NewMessageEvent{
+	messageEvent := &pb.NewMessageEvent{
 		Content:        req.Content,
 		MessageId:      "MessageID",
 		ConversationId: req.ConversationId,
 	}
+	event := &pb.Event{Event: &pb.Event_Message{Message: messageEvent}}
 
+	err := server.sendMessageToConversation(ctx, req.ConversationId, event)
+	if err != nil {
+		return nil, err
+	}
+
+	resp := &pb.SendMessageResponse{
+		MessageId: "MessageID",
+	}
+	return resp, nil
+}
+
+func (server *Server) sendMessageToConversation(ctx context.Context, conversationID string, message *pb.Event) error {
 	wait := sync.WaitGroup{}
 	done := make(chan int)
 
-	for _, conn := range server.connections {
+	// Get all user id by conversation id
+	userIDs, err := server.store.ListUserIdByConversationId(ctx, conversationID)
+	if err != nil {
+		return status.Errorf(codes.Internal, "Failed to get user ids by conversation id")
+	}
+	fmt.Printf("user ids: %v\n", userIDs)
+
+	// Send message to all user have active connection in conversation
+	for _, userID := range userIDs {
+
+		conn := server.connections[userID]
+		if conn == nil {
+			continue
+		}
+
 		wait.Add(1)
 
 		go func(event *pb.Event, conn *Connection) {
@@ -48,7 +77,7 @@ func (server *Server) SendMessage(ctx context.Context, req *pb.SendMessageReques
 					conn.errors <- err
 				}
 			}
-		}(&pb.Event{Event: &pb.Event_Message{Message: event}}, conn)
+		}(message, conn)
 	}
 
 	go func() {
@@ -57,8 +86,5 @@ func (server *Server) SendMessage(ctx context.Context, req *pb.SendMessageReques
 	}()
 	<-done
 
-	resp := &pb.SendMessageResponse{
-		MessageId: "MessageID",
-	}
-	return resp, nil
+	return nil
 }

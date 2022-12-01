@@ -1,5 +1,5 @@
 postgres:
-	docker run --name postgres -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=nhin123456 -d postgres:14.5-alpine
+	docker run --name postgres -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=nhin123456 -d postgres:15.1-alpine
 
 createdb:
 	docker exec -it postgres createdb --username=root --owner=root chat_app
@@ -34,6 +34,8 @@ gen-proto:
 evans:
 	evans --host localhost --port 9090 -r repl
 
+build-server:
+	go build -o ./build
 
 server:
 	nodemon --exec go run main.go --signal SIGTERM

@@ -32,7 +32,7 @@ gen-proto:
     proto/*.proto
 
 evans:
-	evans --host localhost --port 9090 -r repl
+	evans --host localhost --port 8080 -r repl
 
 build-server:
 	go build -o ./build

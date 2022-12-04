@@ -1,0 +1,26 @@
+# syntax=docker/dockerfile:1
+
+## Build
+
+FROM golang:1.19-alpine AS build
+WORKDIR /app
+
+COPY ./ ./
+RUN go mod download
+
+RUN go build -o /chat-app
+
+## Deploy
+
+FROM gcr.io/distroless/base-debian10
+
+WORKDIR /
+
+COPY --from=build /app/chat-app /
+COPY --from=build /app/app.env /
+
+EXPOSE 9090
+
+USER nonroot:nonroot
+
+ENTRYPOINT [ "/chat-app" ]

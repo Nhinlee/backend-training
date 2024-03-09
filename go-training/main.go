@@ -67,8 +67,8 @@ func (f *FireDragon) Lay() ReptileEgg {
 		}}
 }
 
-func main() {
-	var testMap map[string]int
-	fmt.Print(testMap == nil)
-	fmt.Print(testMap)
-}
+// func main() {
+// 	var testMap map[string]int
+// 	fmt.Print(testMap == nil)
+// 	fmt.Print(testMap)
+// }

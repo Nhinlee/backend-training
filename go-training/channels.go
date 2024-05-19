@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-func main() {
+// func main() {
 	// ---------------------
 	// //Create an un-buffered channel
 	// baton := make(chan int)
@@ -39,12 +39,12 @@ func main() {
 
 	// Pipeline ---------------------
 	// PipelineEx()
-}
+// }
 
 func Block1() {
 	// Sending to an unbuffered channel with no receiver.
 	// This will block the current goroutine.
-	ch := make(chan int)
+	ch := make(chan int, 10)
 
 	ch <- 1
 
@@ -78,8 +78,13 @@ func worker(id int, tasks <-chan int, results chan<- int) {
 	// Process tasks from the input channel
 	for task := range tasks {
 		fmt.Printf("Worker %d started task %d\n", id, task)
-		time.Sleep(time.Second) // Simulate processing time
-		results <- task * 2     // Send the result to the output channel
+		t := 10
+		if id == 1 {
+			t = 1000
+		}
+
+		time.Sleep(time.Duration(t) * time.Millisecond) // Simulate processing time
+		results <- task * 2                             // Send the result to the output channel
 		fmt.Printf("Worker %d finished task %d\n", id, task)
 	}
 }

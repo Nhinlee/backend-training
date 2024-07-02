@@ -74,3 +74,33 @@ func lengthOfLongestSubstring(s string) int {
 
 	return longest
 }
+
+// https://leetcode.com/problems/find-the-prefix-common-array-of-two-arrays/description/
+func findThePrefixCommonArray(A []int, B []int) []int {
+	prefixCommonArray := make([]int, 0)
+	seen := make(map[int]bool)
+
+	countPrefix := 0
+	for i := 0; i < len(A); i++ {
+		if _, ok := seen[A[i]]; ok {
+			countPrefix++
+		} else {
+			seen[A[i]] = true
+		}
+
+		if _, ok := seen[B[i]]; ok {
+			countPrefix++
+		} else {
+			seen[B[i]] = true
+		}
+
+		prefixCommonArray = append(prefixCommonArray, countPrefix)
+	}
+
+	return prefixCommonArray
+}
+
+// https://leetcode.com/problems/count-number-of-nice-subarrays/description/
+func numberOfSubarrays(nums []int, k int) int {
+	return -1
+}

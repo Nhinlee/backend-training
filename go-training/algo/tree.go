@@ -99,6 +99,11 @@ func buildTree(preorder []int, inorder []int) *TreeNode {
 	return nil
 }
 
+// https://leetcode.com/problems/longest-zigzag-path-in-a-binary-tree/description/
+func longestZigZag(root *TreeNode) int {
+	return -1
+}
+
 // https://leetcode.com/problems/binary-tree-maximum-path-sum/description/
 func maxPathSum(root *TreeNode) int {
 	return -1

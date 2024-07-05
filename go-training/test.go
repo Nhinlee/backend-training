@@ -1,8 +1,7 @@
 package main
 
 import (
-	"fmt"
-	"training/golibs"
+	"training/algo"
 )
 
 type Account struct {
@@ -53,9 +52,7 @@ type Account struct {
 // }
 
 func main() {
-	fileCount, err := golibs.CountFilesInFolder("./algo")
-	if err != nil {
-		fmt.Errorf("err: %v", err)
-	}
-	fmt.Printf("file count: %d", fileCount)
+	preOrder := []int{3, 9, 20, 15, 7}
+	inOrder := []int{9, 3, 15, 20, 7}
+	_ = algo.BuildTree(preOrder, inOrder)
 }

@@ -96,7 +96,38 @@ func (this *Codec) deserialize(data string) *TreeNode {
 
 // https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/description/
 func buildTree(preorder []int, inorder []int) *TreeNode {
-	return nil
+	pLen := len(preorder)
+	iLen := len(inorder)
+
+	if pLen == 0 {
+		return nil
+	}
+
+	rootVal := preorder[0]
+	root := &TreeNode{
+		Val: rootVal,
+	}
+
+	if len(preorder) == 1 {
+		return root
+	}
+
+	rootIndex := 0
+	for i, v := range inorder {
+		if v == rootVal {
+			rootIndex = i
+		}
+	}
+
+	root.Left = buildTree(preorder[1:rootIndex+1], inorder[0:rootIndex])
+	root.Right = buildTree(preorder[rootIndex+1:pLen], inorder[rootIndex+1:iLen])
+
+	return root
+}
+
+// Public function
+func BuildTree(preorder []int, inorder []int) *TreeNode {
+	return buildTree(preorder, inorder)
 }
 
 // https://leetcode.com/problems/longest-zigzag-path-in-a-binary-tree/description/

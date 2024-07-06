@@ -132,7 +132,34 @@ func BuildTree(preorder []int, inorder []int) *TreeNode {
 
 // https://leetcode.com/problems/longest-zigzag-path-in-a-binary-tree/description/
 func longestZigZag(root *TreeNode) int {
-	return -1
+	var rs int
+	var zigZagMove func(node *TreeNode, direction int, currLen int)
+
+	zigZagMove = func(node *TreeNode, direction, currLen int) {
+		if node == nil {
+			return
+		}
+
+		rs = max(rs, currLen)
+
+		if direction == -1 {
+			// Move right => curLen++
+			zigZagMove(node.Right, 1, currLen+1)
+			// Move left => currLen = 1
+			zigZagMove(node.Left, -1, 1)
+
+		} else {
+			// Move left => curLen++
+			zigZagMove(node.Left, -1, currLen+1)
+			// Move right => currLen = 1
+			zigZagMove(node.Right, 1, 1)
+		}
+	}
+
+	zigZagMove(root.Left, -1, 1)
+	zigZagMove(root.Right, 1, 1)
+
+	return rs
 }
 
 // https://leetcode.com/problems/binary-tree-maximum-path-sum/description/

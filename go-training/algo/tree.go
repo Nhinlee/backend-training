@@ -162,6 +162,30 @@ func longestZigZag(root *TreeNode) int {
 	return rs
 }
 
+// https://leetcode.com/problems/recover-binary-search-tree/description/
+func recoverTree(root *TreeNode)  {
+	var prev, first, second *TreeNode
+	var dfs func(node *TreeNode)
+
+	dfs = func(node *TreeNode) {
+		if node == nil {
+			return
+		}
+
+		dfs(node.Left)
+		if prev != nil {
+			if first == nil && prev.Val >= node.Val {first = prev}
+			if first != nil && prev.Val >= node.Val {second = node} 
+		}
+		prev = node
+		dfs(node.Right)
+	}
+
+	dfs(root)
+
+	first.Val, second.Val = second.Val, first.Val
+}
+
 // https://leetcode.com/problems/binary-tree-maximum-path-sum/description/
 func maxPathSum(root *TreeNode) int {
 	return -1
